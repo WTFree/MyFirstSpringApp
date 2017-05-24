@@ -1,0 +1,10 @@
+$(document).ready(function(){
+    $("#registration").click(function(){
+        $(this).hide();
+    });
+});
+$(document).ready(function(){
+    $("#login").click(function(){
+        $(this).hide();
+    });
+});
