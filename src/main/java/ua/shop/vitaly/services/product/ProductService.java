@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ua.shop.vitaly.models.product.NoSuchProductException;
 import ua.shop.vitaly.models.product.Product;
@@ -15,13 +16,17 @@ public class ProductService implements IProductService {
 	@Autowired
 	private JDBCProductDAO productDAO;
 	
+	@Override
+	@Transactional
 	public Product getProduct(int id) throws Exception {
 		if(productDAO.getProduct(id)!=null){
 			return productDAO.getProduct(id);
 		}
 		else{throw new NoSuchProductException("Error: Invalid product id");}
 	}
-
+	
+	@Override
+	@Transactional
 	public Product getProduct(String name, String price, String type, String img) throws Exception {
 		if(productDAO.getProduct(name, price, type, img)!=null){
 			return productDAO.getProduct(name, price, type, img);
@@ -29,14 +34,21 @@ public class ProductService implements IProductService {
 		else{throw new NoSuchProductException("Error: fields were wrong, try to switch them");}
 	}
 
+	@Override
+	@Transactional
 	public ArrayList<Product> getAllProducts() throws Exception {
 		return productDAO.getAllProducts();
 	}
-
+	
+	@Override
+	@Transactional
 	public ArrayList<Product> getAllProductsByName(String name) throws Exception {
 		return productDAO.getAllProductsByName(name);
 	}
+	
 	//Admin ACTIONS
+	@Override
+	@Transactional
 	public int updateProduct(Product OLDproduct, Product NEWproduct) throws Exception {
 		
 		boolean productUP = false;
@@ -72,7 +84,9 @@ public class ProductService implements IProductService {
 			throw new NoSuchProductException("Error: old products didn't register or new product is invalid");
 		}	
 	}
-
+	
+	@Override
+	@Transactional
 	public boolean deleteProduct(Product product) throws Exception {
 		boolean productUP = false;
 	    if(product.getName()!=null && product.getName().length()>4 && product.getPrice()!=null && product.getPrice().length()>0 &&
@@ -108,6 +122,8 @@ public class ProductService implements IProductService {
 	    }
 	}
 
+	@Override
+	@Transactional
 	public boolean createProduct(String nameProd, String price, String type, String img) throws NoSuchProductException {
 		boolean productUP = false;
 		if(nameProd!=null && nameProd.length()>4 && price!=null && price.length()>0 &&
@@ -136,6 +152,8 @@ public class ProductService implements IProductService {
 	}
 	
 	//Basket ACTION
+	@Override
+	@Transactional
 	public boolean AddToBasket(int userID, int productID) throws Exception{
 		
 		int count = 0; 
@@ -159,11 +177,15 @@ public class ProductService implements IProductService {
 		else{throw new NoSuchProductException("Error: That product did not find");}
 		
 	}
-
+	
+	@Override
+	@Transactional
 	public ArrayList<Product> getFromBasket(int id) {
 		return productDAO.getFromBasket(id);
 	}
 
+	@Override
+	@Transactional
 	public boolean RemoveFromBasket(int userID, int prodID) throws Exception{
 		boolean prodUP = false;
  		try {
